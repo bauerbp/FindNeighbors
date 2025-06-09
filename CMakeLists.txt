@@ -8,4 +8,4 @@ project(FindNeighbors VERSION 1.0)
 
 add_executable(FindNeighbors main.cpp)
 
-target_sources(FindNeighbors PRIVATE "FindNeighborsGrid.cxx" "Grid.cxx" "PointSheet.hxx"
+target_sources(FindNeighbors PRIVATE "FindNeighborsGrid.cxx" "Grid.cxx" "PointSheet.hxx")
