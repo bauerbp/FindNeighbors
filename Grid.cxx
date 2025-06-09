@@ -5,8 +5,18 @@
 #include <set>
 
 using namespace NeighborFinder;
-
-Grid::Grid(PointSheet pointSheet) {
+/**
+ * The Constructor for a Grid.
+ * 
+ * @param pointSheet A vector of 2D Point object pointers.
+ */
+Grid::Grid(PointSheet pointSheet) : m_minX(0),
+                                    m_maxX(0),
+                                    m_minY(0),
+                                    m_maxY(0),
+                                    m_binHeight(0),
+                                    m_binWidth(0),
+                                    m_gridDimensions(0) {
     // Find the bounds of the sheet
     for(auto& point : pointSheet) {
         m_minX = std::min(point->x, m_minX);
@@ -19,19 +29,25 @@ Grid::Grid(PointSheet pointSheet) {
     const CoordinateType xSpread = m_maxX - m_minX;
     const CoordinateType ySpread = m_maxY - m_minY;
 
-    // Just divide into 20 rows and columns. Pretty arbitrary, and
+    // Just divide into 20 rows and 20 columns. Pretty arbitrary, and
     // I'm sure there are better ways. But for now...
-    int gridDimension = 20;
+    m_gridDimensions = 20;
     m_binWidth = static_cast<std::size_t>(
-                  std::floor(xSpread / gridDimension)) +
+                  std::floor(xSpread / m_gridDimensions)) +
                1;
     m_binHeight = static_cast<std::size_t>(
-                   std::floor(ySpread / gridDimension)) +
+                   std::floor(ySpread / m_gridDimensions)) +
                1;
-    m_grid.resize(gridDimension*gridDimension);
+    m_grid.resize(m_gridDimensions*m_gridDimensions);
     fillGrid(pointSheet);
 }
 
+/**
+ * Populates the grid but placing the points in the appropriate
+ * bins.
+ * 
+ * @param pointSheet A vector of 2D Point object pointers.
+ */
 void Grid::fillGrid(PointSheet points) {
     for (auto& point : points) {
         auto index = getFlattenedBinIndexOfPoint(*point);
@@ -42,6 +58,9 @@ void Grid::fillGrid(PointSheet points) {
     }
 }
 
+/**
+ * Check if a bin index is valid
+ */
 bool Grid::isIndexValid(int index) {
     if (index < 0) {
         return false;
@@ -52,16 +71,26 @@ bool Grid::isIndexValid(int index) {
     return true;
 }
 
+/**
+ * Gives the vector of Point pointers in a bin.
+ * 
+ * @param binIndex The index of the bin you want the points of.
+ */
 std::vector<Point*> Grid::getBinContents(int binIndex) {
     assert((void("getBinOfPoint"), isIndexValid(binIndex)));
     return m_grid.at(binIndex);
 }
 
-// generic function to flatten index
+/**
+ * generic function to flatten index
+ */
 int Grid::getFlattenedIndex(int x, int y) {
     return x + y * m_gridDimensions;
 }
 
+/**
+ * Figure out which bin a given point ought to be in.
+ */
 int Grid::getFlattenedBinIndexOfPoint(Point point) {
     // The bin's index
     auto indexX =
@@ -73,6 +102,13 @@ int Grid::getFlattenedBinIndexOfPoint(Point point) {
     return indexX + indexY * m_gridDimensions;
 }
 
+/**
+ * Returns the set of bin indices which are adjacent (diagonals included) 
+ * to the given bin.
+ * 
+ * @param centralBinIndex The index of the bin for which you want to find the
+ * adjacent bin indices.
+ */
 std::set<int> Grid::getAdjacentBinIndices(int centralBinIndex) {
     std::set<int> outIndices;
     // Unflatten index
@@ -119,6 +155,18 @@ std::set<int> Grid::getAdjacentBinIndices(int centralBinIndex) {
     return outIndices;
 }
 
+/**
+ * @brief Returns the points that the nearest neighbors must be in.
+ * 
+ * This is an important method. If you give a point and request some number
+ * of neighbors, it will continue gathering the points from bins near to
+ * the bin of the input point until it has at least as many points as there
+ * are neighbors requested; or until there are no more points to gather.
+ * 
+ * @param point The position the user wants to find the points nearest to. It
+ * doesn't have to exist in the point sheet already.
+ * @param neighbors The number of neighbors to find.
+ */
 std::vector<Point*> Grid::getCombinedBinsToCheck(Point point, int neighbors) {
     std::set<int> binIndices;
     auto pointBinIndex = getFlattenedBinIndexOfPoint(point);

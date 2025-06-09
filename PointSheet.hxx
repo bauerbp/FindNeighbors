@@ -7,6 +7,10 @@ namespace NeighborFinder {
 using CoordinateType = double;
 
 struct Point {
+
+    /**
+     * A simple 2D point implementation.
+     */
     Point(CoordinateType x, CoordinateType y) : x(x), y(y) {}
     CoordinateType x;
     CoordinateType y;
@@ -23,7 +27,7 @@ struct Point {
 };
 
 /**
- * @brief Represents a set of 2D points
+ * Represents a set of 2D points
  */
 typedef std::vector<Point*> PointSheet;
 

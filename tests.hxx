@@ -4,7 +4,7 @@
 #include <iostream>
 
 using namespace NeighborFinder;
-// test sheet with some hand crafted, bespoke points
+// test sheet with some hand-crafted, bespoke points
 PointSheet testSheet1() {
     PointSheet sheet;
     sheet.push_back(new Point(5, 5)); // center

@@ -4,6 +4,12 @@
 
 namespace NeighborFinder {
 
+    /**
+     * @brief The grid class is used to track where points are.
+     * 
+     * The grid is a flattened matrix of bins superimposed on the 2D points.
+     * Each bin is a vector of Point pointers.
+     */
     struct Grid {
         // Generates a number of random points
         Grid(size_t pointCount);
