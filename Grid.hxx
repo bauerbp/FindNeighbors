@@ -20,6 +20,8 @@ namespace NeighborFinder {
         // at least the number of nearest points requested
         std::vector<Point*> getCombinedBinsToCheck(Point, int);
 
+        // TODO: write a debug dump to make sure that the grid looks right
+
         private:
         void fillGrid(PointSheet);
 
@@ -36,8 +38,8 @@ namespace NeighborFinder {
         CoordinateType m_minY;
         CoordinateType m_maxY;
 
-        size_t m_binWidth;
-        size_t m_binHeight;
+        double m_binWidth;
+        double m_binHeight;
 
         // How many bins across
         size_t m_gridDimensions;

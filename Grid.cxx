@@ -32,12 +32,8 @@ Grid::Grid(PointSheet pointSheet) : m_minX(0),
     // Just divide into 20 rows and 20 columns. Pretty arbitrary, and
     // I'm sure there are better ways. But for now...
     m_gridDimensions = 20;
-    m_binWidth = static_cast<std::size_t>(
-                  std::floor(xSpread / m_gridDimensions)) +
-               1;
-    m_binHeight = static_cast<std::size_t>(
-                   std::floor(ySpread / m_gridDimensions)) +
-               1;
+    m_binWidth = xSpread / m_gridDimensions;
+    m_binHeight = ySpread / m_gridDimensions;
     m_grid.resize(m_gridDimensions*m_gridDimensions);
     fillGrid(pointSheet);
 }
@@ -65,7 +61,7 @@ bool Grid::isIndexValid(int index) {
     if (index < 0) {
         return false;
     }
-    if (index >= m_gridDimensions) {
+    if (index >= m_gridDimensions*m_gridDimensions) {
         return false;
     }
     return true;
@@ -98,8 +94,15 @@ int Grid::getFlattenedBinIndexOfPoint(Point point) {
     auto indexY =
         std::floor((point.y - m_minY) / m_binHeight);
 
+    if (indexX >= m_gridDimensions) {
+        indexX = m_gridDimensions - 1;
+    }
+    if (indexY >= m_gridDimensions) {
+        indexY = m_gridDimensions - 1;
+    }
+
     // get the flattened index
-    return indexX + indexY * m_gridDimensions;
+    return getFlattenedIndex(indexX, indexY);
 }
 
 /**
@@ -113,7 +116,7 @@ std::set<int> Grid::getAdjacentBinIndices(int centralBinIndex) {
     std::set<int> outIndices;
     // Unflatten index
     int indexX = centralBinIndex % m_gridDimensions;
-    int indexY = centralBinIndex - indexX;
+    int indexY = (centralBinIndex - indexX) / m_gridDimensions;
 
     // lil util to make sure we're not going out of bounds
     auto isOk = [&](int i) -> bool { 
@@ -170,17 +173,34 @@ std::set<int> Grid::getAdjacentBinIndices(int centralBinIndex) {
 std::vector<Point*> Grid::getCombinedBinsToCheck(Point point, int neighbors) {
     std::set<int> binIndices;
     auto pointBinIndex = getFlattenedBinIndexOfPoint(point);
-    binIndices.insert(pointBinIndex);
+    binIndices.insert(pointBinIndex); // accumulated bins
     std::vector<Point*> accumulatedPoints = getBinContents(pointBinIndex);
 
+    // Keep gathering until we have a number to search which is at least the number of neighbors
     while (accumulatedPoints.size() < neighbors) {
-        auto newAdj = getAdjacentBinIndices(pointBinIndex);
-        for (auto index : newAdj) {
+        std::set<int> unsearchedBins;
+
+        // Broaden our search, but don't bother with bins we've already looked in
+        for(auto bins : binIndices) {
+            auto newAdj = getAdjacentBinIndices(bins);
+            for (auto adj : newAdj) {
+                if (!binIndices.contains(adj)) {
+                    unsearchedBins.insert(adj);
+                }
+            }
+        }
+
+        // We've gathered as many points as there are
+        if (unsearchedBins.empty()) {
+            break;
+        }
+
+        for (auto index : unsearchedBins) {
             auto newPoints = getBinContents(index);
             accumulatedPoints.insert(accumulatedPoints.begin(), newPoints.begin(), newPoints.end());
-            
-            binIndices.insert(newAdj.begin(), newAdj.end());
         }
+        // These are now already accumulated
+        binIndices.insert(unsearchedBins.begin(), unsearchedBins.end());
     }
     return accumulatedPoints;
 }

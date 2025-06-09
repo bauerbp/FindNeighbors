@@ -16,6 +16,9 @@ int main()
     printSheet(sheet2);
 
     FindNeighborsGrid gridFind(sheet1);
-    auto neighbors = gridFind(Point(5,5), 4);
-    printSheet(neighbors);
+    auto neighbors1 = gridFind(Point(5,5), 5);
+    printSheet(neighbors1);
+    
+    auto neighbors2 = gridFind(Point(5,5), 6);
+    printSheet(neighbors2);
 }
