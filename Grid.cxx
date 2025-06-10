@@ -1,8 +1,10 @@
-#include "Grid.hxx"
 #include <cmath>
 #include <cassert>
 #include <iostream>
 #include <set>
+
+#include "Grid.hxx"
+#include "tests.hxx"
 
 using namespace NeighborFinder;
 /**
@@ -52,6 +54,19 @@ void Grid::fillGrid(PointSheet points) {
         }
         m_grid[index].push_back(point);
     }
+
+    // dumpGrid();
+}
+
+/**
+ * Print out the grid contents
+ */
+void Grid::dumpGrid() {
+    for (auto ii = 0; ii < m_grid.size(); ++ii) {
+        std::cout << "grid " << ii << "\n";
+        printSheet(m_grid.at(ii));
+    }
+    std::cout << "\n";
 }
 
 /**

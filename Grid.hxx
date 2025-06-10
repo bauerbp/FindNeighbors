@@ -24,6 +24,7 @@ namespace NeighborFinder {
 
         private:
         void fillGrid(PointSheet);
+        void dumpGrid();
 
         std::vector<Point*> getBinContents(int);
         std::vector<std::vector<Point*>> getBinsAdjacentToPoint(Point);

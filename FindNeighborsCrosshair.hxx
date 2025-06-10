@@ -25,11 +25,13 @@ namespace NeighborFinder {
         FindNeighborsCrosshair(PointSheet sheet);
 
         // get the n neighbors
-        std::vector<Point*> operator()(int numNeighbors);
+        std::vector<Point*> operator()(Point* point, int numNeighbors);
 
         private:
         PointSheet m_sheet;
         std::vector<Point*> m_pointsX; // sheet sorted by x-coord
+        static bool xCoordComp(Point* left, Point* right);
         std::vector<Point*> m_pointsY; // sheet sorted by y-coord
+        static bool yCoordComp(Point* left, Point* right);
     };
 }

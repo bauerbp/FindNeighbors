@@ -32,6 +32,8 @@ static PointSheet testSheet2() {
     return sheet;
 }
 
+// Small function to help debug visually. Will be useful if i
+// want to dump to gnuplot file
 static void printSheet(PointSheet sheet) {
     for (auto point : sheet) {
         std::cout << point->x << "," << point->y << "\n";
