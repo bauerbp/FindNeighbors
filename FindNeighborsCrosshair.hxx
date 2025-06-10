@@ -20,14 +20,16 @@ namespace NeighborFinder {
      * look at points with an x || y distance > 15
      */
     class FindNeighborsCrosshair {
-
+        public:
         FindNeighborsCrosshair() = delete;
         FindNeighborsCrosshair(PointSheet sheet);
 
         // get the n neighbors
-        std::vector<Point> operator()(int numNeighbors);
+        std::vector<Point*> operator()(int numNeighbors);
 
         private:
         PointSheet m_sheet;
+        std::vector<Point*> m_pointsX; // sheet sorted by x-coord
+        std::vector<Point*> m_pointsY; // sheet sorted by y-coord
     };
 }

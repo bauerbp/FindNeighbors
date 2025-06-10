@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 
+#include "FindNeighborsCrosshair.hxx"
 #include "FindNeighborsGrid.hxx"
 #include "PointSheet.hxx"
 #include "tests.hxx"
@@ -21,4 +22,6 @@ int main()
     
     auto neighbors2 = gridFind(Point(5,5), 6);
     printSheet(neighbors2);
+
+    FindNeighborsCrosshair crossFind(sheet1);
 }
