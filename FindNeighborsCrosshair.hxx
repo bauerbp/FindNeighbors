@@ -25,7 +25,7 @@ namespace NeighborFinder {
         FindNeighborsCrosshair(PointSheet sheet);
 
         // get the n neighbors
-        std::vector<Point*> operator()(Point* point, int numNeighbors);
+        std::vector<Point*> operator()(Point point, int numNeighbors);
 
         private:
         PointSheet m_sheet;

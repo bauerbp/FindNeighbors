@@ -23,6 +23,6 @@ int main()
     auto neighbors2 = gridFind(Point(5,5), 6);
     // printSheet(neighbors2);
 
-    FindNeighborsCrosshair crossFind(sheet1);
-    auto neighborsCross = crossFind(sheet1[1], 3);
+    FindNeighborsCrosshair crossFind(sheet2);
+    auto neighborsCross = crossFind(Point(5, 5), 3);
 }

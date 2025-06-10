@@ -25,18 +25,19 @@ bool FindNeighborsCrosshair::yCoordComp(Point* left, Point* right) {
     return left->y < right->y;
 }
 
-std::vector<Point*> FindNeighborsCrosshair::operator()(Point* point, int neighbors) {
-    std::cout << "searching for " << point->x << "," << point->y << "\n";
+std::vector<Point*> FindNeighborsCrosshair::operator()(Point point, int neighbors) {
+    std::cout << "searching for " << point.x << "," << point.y << "\n";
 
     // Find coordinate in x-sorted list
-    auto xIter = std::lower_bound(m_pointsX.begin(), m_pointsX.end(), point, xCoordComp);
+    auto xIter = std::lower_bound(m_pointsX.begin(), m_pointsX.end(), &point, xCoordComp);
     std::cout << (*xIter)->x << "," << (*xIter)->y << "\n";
 
     // Find coordinate in y-sorted list
-    auto yIter = std::lower_bound(m_pointsY.begin(), m_pointsY.end(), point, yCoordComp);
+    auto yIter = std::lower_bound(m_pointsY.begin(), m_pointsY.end(), &point, yCoordComp);
     std::cout << (*yIter)->x << "," << (*yIter)->y << "\n";
 
     // start looking outward from the iterators.
+
 
     return {};
 }
