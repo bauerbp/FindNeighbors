@@ -5,6 +5,7 @@
 #include "FindNeighborsCrosshair.hxx"
 #include "FindNeighborsGrid.hxx"
 #include "PointSheet.hxx"
+#include "SimpleSearch.hxx"
 #include "tests.hxx"
 
 using namespace std;
@@ -25,4 +26,7 @@ int main()
 
     FindNeighborsCrosshair crossFind(sheet2);
     auto neighborsCross = crossFind(Point(5, 5), 3);
+
+    auto neighborsSimple = SimpleSearch(sheet1, Point(5, 5), 5);
+    printSheet(neighborsSimple);
 }
