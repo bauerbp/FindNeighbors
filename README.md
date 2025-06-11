@@ -4,7 +4,7 @@ If you have a set of 2 dimensional coordinates, how do you find its N nearest ne
 
 ## Options
 
-### Naive
+### Simple
 
 The simple way would be to check against every other point. And what if you need to find the nearest neighbors for _every_ point? This method gets slow fast, but it's simple to implement and can be used as a baseline.
 
