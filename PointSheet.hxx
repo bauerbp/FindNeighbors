@@ -16,6 +16,9 @@ struct Point {
     CoordinateType y;
     // neat: Don't have to define all of the comparison operators.
     // https://www.reddit.com/r/cpp/comments/11bae6w/avoid_the_code_smell_of_stdpair_and_stdtuple/
+    /// Edit: The defaults are not useful. For comparison and equality, it will only check the variables
+    /// in order of declaration until it has a result. So it always only checks `x`.
+    /// https://en.cppreference.com/w/cpp/language/default_comparisons.html
     auto operator <=> (const Point& rhs) const = default;
 
     // thanks, pythagoras

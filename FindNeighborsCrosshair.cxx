@@ -6,6 +6,7 @@
 using namespace NeighborFinder;
 
 FindNeighborsCrosshair::FindNeighborsCrosshair(PointSheet sheet) {
+    // Create the sorted lists
     m_pointsX = sheet;
     std::sort(m_pointsX.begin(), m_pointsX.end(), xCoordComp);
     

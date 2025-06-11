@@ -29,6 +29,8 @@ namespace NeighborFinder {
 
         private:
         PointSheet m_sheet;
+
+        // TODO: move these to the Point class as operator overrides?
         std::vector<Point*> m_pointsX; // sheet sorted by x-coord
         static bool xCoordComp(Point* left, Point* right);
         std::vector<Point*> m_pointsY; // sheet sorted by y-coord
