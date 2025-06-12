@@ -1,32 +1,48 @@
+#include <chrono>
 #include <iostream>
 #include <vector>
 #include <string>
+#include <assert.h>
 
 #include "FindNeighborsCrosshair.hxx"
 #include "FindNeighborsGrid.hxx"
 #include "PointSheet.hxx"
 #include "SimpleSearch.hxx"
 #include "tests.hxx"
+#include "Timer.hxx"
 
 using namespace std;
 
 int main()
 {
-    auto sheet1 = testSheet1();
-    auto sheet2 = testSheet2();
-    printSheet(sheet1);
-    printSheet(sheet2);
+    // auto sheet1 = testSheet1();
+    // printSheet(sheet1);
 
-    FindNeighborsGrid gridFind(sheet1);
-    auto neighbors1 = gridFind(Point(5,5), 5);
-    // printSheet(neighbors1);
-    
-    auto neighbors2 = gridFind(Point(5,5), 6);
-    // printSheet(neighbors2);
+    for(int ii = 5; ii < 6; ii++) {
+        auto testSheet = genSheet(ii);
 
-    FindNeighborsCrosshair crossFind(sheet2);
-    auto neighborsCross = crossFind(Point(5, 5), 3);
+        auto firstPoint = testSheet.at(0);
+        int numToFind = std::ceil(ii*.1);
 
-    auto neighborsSimple = SimpleSearch(sheet1, Point(5, 5), 5);
-    printSheet(neighborsSimple);
+        // Grid
+        FindNeighborsGrid gridFind(testSheet);
+        auto timerGrid = TickTock();
+        timerGrid.tick();
+        auto neighborsGrid = gridFind(*firstPoint, numToFind);
+        auto gridMS = timerGrid.tock();
+
+        // FindNeighborsCrosshair crossFind(sheet2);
+        // auto neighborsCross = crossFind(Point(5, 5), 5);
+
+        // Simple
+        auto timerSimple = TickTock();
+        timerSimple.tick();
+        auto neighborsSimple = SimpleSearch(testSheet, *firstPoint, numToFind);
+        auto simpleMS = timerSimple.tock();
+
+        assert(neighborsSimple == neighborsGrid);
+        std::cout << "Grid: " << gridMS << "\n";
+        std::cout << "Simple: " << simpleMS << "\n";
+        // TODO: print to file for plotting
+    }
 }

@@ -17,13 +17,13 @@ static PointSheet testSheet1() {
 }
 
 // A bunch of random points
-static PointSheet testSheet2() {
+static PointSheet genSheet(int nPoints) {
     PointSheet sheet;
     
     std::random_device r;
     std::default_random_engine e1(r());
-    std::uniform_int_distribution<int> numberMaker(0, 1000);
-    for (auto i = 0; i < 10; ++i)
+    std::uniform_int_distribution<int> numberMaker(0, nPoints * 10);
+    for (auto i = 0; i < nPoints; ++i)
     {
         int x = numberMaker(e1);
         int y = numberMaker(e1);
