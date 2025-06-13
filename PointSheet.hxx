@@ -22,9 +22,9 @@ struct Point {
     auto operator <=> (const Point& rhs) const = default;
 
     // thanks, pythagoras
-    double distanceTo(const Point& other) {
+    double distanceTo(const Point& other) const {
         double xDiff = this->x - other.x;
-        double yDiff = this->y = other.y;
+        double yDiff = this->y - other.y;
         return sqrt(pow(xDiff, 2) + pow(yDiff, 2));
     }
 };
